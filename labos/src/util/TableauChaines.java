@@ -18,6 +18,7 @@ public class TableauChaines {
 
 	public static String toString(String[] tableau, int nbElements) {
 		String stuff = "";
+		
 		for (int i = 0; i < nbElements; i++) {
 			if(i > 0) {
 				stuff+= ", " + tableau[i].toString();
