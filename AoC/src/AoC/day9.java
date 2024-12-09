@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class day8 {
+public class day9 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -18,7 +18,7 @@ public class day8 {
 	
 	public static void part1() {
 		//String[] string = Fichier.lireLignes("data/day8Input1.txt");
-		Path file = Paths.get("data/day8Input2.txt");
+		Path file = Paths.get("data/day9Input2.txt");
 		String string = null;
 		try {
 			string = Files.readString(file);
@@ -94,7 +94,7 @@ public class day8 {
 	
 	public static void part1ForReal() {
 		//String[] string = Fichier.lireLignes("data/day8Input1.txt");
-		Path file = Paths.get("data/day8Input2.txt");
+		Path file = Paths.get("data/day8Input9.txt");
 		String string = null;
 		try {
 			string = Files.readString(file);
@@ -181,7 +181,7 @@ public class day8 {
 	
 	public static void part2() {
 
-		Path file = Paths.get("data/day8Input2.txt");
+		Path file = Paths.get("data/day9Input2.txt");
 		String string = null;
 		try {
 			string = Files.readString(file);
@@ -220,14 +220,14 @@ public class day8 {
 			if(check.equals("0")) {
 				break;
 			}
-			
+				
 			check = fullString.get(j);
 			String oldCheck = check;
 			int backCount = 0;
-			for (int i = 0; i < j; i++) {
+			for (int i = 0; i <= j; i++) {
 			
 				check = fullString.get(j-i);
-				
+					
 				if(!oldCheck.equals(".")) {
 					
 					if(!check.equals(oldCheck)) {
@@ -245,7 +245,7 @@ public class day8 {
 										fullString.set(index+backCount-m, ".");
 									}
 									backCount = 0;
-//									System.out.println(fullString);
+//								System.out.println(fullString);
 									break;
 								}
 							}
