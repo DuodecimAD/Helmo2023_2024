@@ -181,7 +181,7 @@ public class day9 {
 	
 	public static void part2() {
 
-		Path file = Paths.get("data/day9Input2.txt");
+		Path file = Paths.get("data/day9Input1.txt");
 		String string = null;
 		try {
 			string = Files.readString(file);
@@ -232,7 +232,7 @@ public class day9 {
 					
 					if(!check.equals(oldCheck)) {
 						int index = j-i;
-						for (int k = 0; k < index; k++) {
+						for (int k = 0; k <= index; k++) {
 							if (fullString.get(k).equals(".")){
 								int points = k;
 								do {
