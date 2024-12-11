@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import chap9.CollecteDons;
+
 class CollecteDonsTest {
 
 	@Test

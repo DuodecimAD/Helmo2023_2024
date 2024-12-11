@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import chap9.LectureDate;
 import io.Console;
 
 class LectureDateTest {

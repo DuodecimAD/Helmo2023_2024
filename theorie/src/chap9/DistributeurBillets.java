@@ -1,4 +1,4 @@
-package chap8;
+package chap9;
 
 import io.Console;
 

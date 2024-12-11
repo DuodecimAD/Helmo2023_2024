@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class day9 {
 
@@ -181,7 +180,7 @@ public class day9 {
 	
 	public static void part2() {
 
-		Path file = Paths.get("data/day9Input1.txt");
+		Path file = Paths.get("data/day9Input2.txt");
 		String string = null;
 		try {
 			string = Files.readString(file);
@@ -245,7 +244,7 @@ public class day9 {
 										fullString.set(index+backCount-m, ".");
 									}
 									backCount = 0;
-//								System.out.println(fullString);
+//									System.out.println(fullString);
 									break;
 								}
 							}
@@ -271,8 +270,8 @@ public class day9 {
 				finalIndex++;
 			} else {
 				int value = Integer.parseInt(fullString.get(i));
-				int calcul = finalIndex * value;
-//				System.out.printf("%d * %d = %d\n", finalIndex, value, calcul);
+				long calcul = finalIndex * value;
+//				System.out.printf("%d * %d = %d\n", value, finalIndex, calcul);
 				somme += calcul;
 				finalIndex++;
 			}
