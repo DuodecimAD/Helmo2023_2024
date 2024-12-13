@@ -15,17 +15,13 @@ public class day9 {
 		//part1ForReal();
 		
 		
-		// Cannot get the freaking correct number for part 2 of AoC 9 
-		// but at least I optimized the running time of my code ...	  
-		part2Original();
-		//	answer : 6353640225186
-		//	Duration : 1.717 sec 
+        // using String[]
 		part2();
-		//	answer : 6353640225186
-		//	Duration : 0.923 sec 
+		//	Duration : 0.921 sec 
+		
+		// using int[]
 		part2NewIdea();	
-		//	answer : 6353640225186
-		//	Duration : 0.371 sec 
+		//	Duration : 0.427 sec 
 		 
 
         //part2StringBuilder();
@@ -242,7 +238,7 @@ public class day9 {
 				
 				if(!check.equals(oldCheck)) {
 					int index = j-i;
-					for (int k = 0; k < index; k++) {
+					for (int k = 0; k <= index; k++) {
 						if (fullString.get(k).equals(".")){
 							int points = k;
 							do {
@@ -326,45 +322,53 @@ public class day9 {
 				array.add(String.valueOf(toAppend));
 			}
 		}
+		file = null;
+		string = null;
 		
 		String[] fullString = array.toArray(new String[0]);
-
+		array = null;
+		
 //		System.out.println(Arrays.toString(fullString));
-
+		ArrayList<String> alreadySeen = new ArrayList<String>();
 		int fullLength = fullString.length;
 		String check = "";
-		int j = fullLength-1;
-		
-		check = fullString[j];
-		String oldCheck = check;
+		String oldCheck = fullString[fullLength-1];
 		int backCount = 0;
-		for (int i = 0; i < j; i++) {
-		
-			check = fullString[j-i];
-				
+		for (int i = fullLength-1; i > 0; i--) {
+
+			check = fullString[i];
+
 			if(!oldCheck.equals(".")) {
 				
 				if(!check.equals(oldCheck)) {
-					int index = j-i;
-					for (int k = 0; k < index; k++) {
-						if (fullString[k].equals(".")){
-							int points = k;
-							do {
-								points++;
-							} while (fullString[points].equals("."));
-						
-							if(backCount <=  points-k) {
-								for (int m = 0; m < backCount; m++) {
-									fullString[m+k] = oldCheck;
-									fullString[index+backCount-m] = ".";
+					if(!alreadySeen.contains(oldCheck)) {
+						for (int k = 0; k <= i; k++) {
+						String test = fullString[k];
+
+							if (fullString[k].equals(".")){
+								int points = 0;
+								do {
+									points++;
+								} while (fullString[k+points].equals("."));
+							
+								if(backCount <=  points) {
+									for (int m = 0; m < backCount; m++) {
+										fullString[m+k] = oldCheck;
+										fullString[i+backCount-m] = ".";
+										
+									}
+									alreadySeen.add(oldCheck);
+									backCount = 0;
+//										System.out.println(Arrays.toString(fullString));
+									break;
+								} else {
+									k = k + points-1;
 								}
-								backCount = 0;
-//									System.out.println(Arrays.toString(fullString));
-								break;
 							}
-						}
-					}	
-					backCount = 0;			
+						}	
+					
+					}
+					backCount = 0;				
 				}
 			}else {
 				backCount = 0;
@@ -374,7 +378,7 @@ public class day9 {
 		}
 
 
-//		System.out.println(fullString);
+//		System.out.println(Arrays.toString(fullString));
 
 		long somme = 0;
 		int finalIndex = 0;
@@ -440,46 +444,57 @@ public class day9 {
 	        for (int i = 0; i < fullLength; i++) {
 	        	fullArray[i] = array.get(i);
 	        }
+	        
+	        // clearing memory
+	        array = null;
+	        file = null;
+	        string = null;
+	        count = 0;
+	        
 
 //			System.out.println(Arrays.toString(fullArray));
-			
+
+	        ArrayList<Integer> alreadySeen = new ArrayList<Integer>();
 			int check;
-			int j = fullLength-1;
-			// starting from the end of the array --
-			
-			check = fullArray[j];
-			int oldCheck = check;
+			int oldCheck = fullArray[fullLength-1];;
 			int backCount = 0;
 			
-			// starting after the "firstNumberOfString" first elements 0
-			for (int i = firstNumberOfString; i < j; i++) {
+			// starting from the end of the array --
+			for (int i = fullLength-1; i > firstNumberOfString; i--) {
 			
-				check = fullArray[j-i+firstNumberOfString];
+				check = fullArray[i];
 					
 				if(!(oldCheck == 0)) {
 					// if the new number is != than the previous one
 					if(!(check == oldCheck)) {
-						int index = j-i+firstNumberOfString;
-						// search left to right for zeros
-						for (int k = firstNumberOfString; k < index; k++) {
-							if (fullArray[k] == 0){
-								int points = k;
-								// count how many zeros after first one found
-								do {
-									points++;
-								} while (fullArray[points] == 0);
-							
-								if(backCount <=  points-k) {
-									for (int m = 0; m < backCount; m++) {
-										fullArray[m+k] = oldCheck;
-										fullArray[index+backCount-m] = 0;
+						// if the number has not been seen yet
+				        if(!alreadySeen.contains(oldCheck)) {
+					        // search left to right for zeros
+							for (int k = firstNumberOfString; k <= i; k++) {
+								if (fullArray[k] == 0){
+									int points = 0;
+									// count how many zeros after first one found
+									do {
+										points++;
+									} while (fullArray[k+points] == 0);
+								
+									if(backCount <=  points) {
+										for (int m = 0; m < backCount; m++) {
+											fullArray[m+k] = oldCheck;
+											fullArray[i+backCount-m] = 0;
+										}
+										// add the number to the alreadySeen list
+										alreadySeen.add(oldCheck);
+										backCount = 0;
+//										System.out.println(Arrays.toString(fullArray));
+										break;
+									}else {
+										// skip the zeros and check next number
+										k = k + points-1;
 									}
-									backCount = 0;
-//									System.out.println(Arrays.toString(fullArray));
-									break;
 								}
 							}
-						}	
+				        }
 						backCount = 0;			
 					}
 				}else {
@@ -489,7 +504,7 @@ public class day9 {
 				backCount++;
 			}
 
-//			System.out.println(fullString);
+//			System.out.println(Arrays.toString(fullArray));
 			
 			long somme = 0;
 
