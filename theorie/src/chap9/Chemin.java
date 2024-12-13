@@ -11,18 +11,78 @@ import util.Aleatoire;
 public class Chemin {
 
 	public static void main(String[] args) {
+		String directions = "B";
 		char[][] chemin = genererChemin(9, 7);
 		afficher(chemin);
 		
 
 		int depart = positionDe(chemin[0], '*');
-		System.out.println("departIndex : " + depart);
+		//System.out.println("departIndex : " + depart);
 		
-		// explorer gauche et droite suite
-		int poGauche = positionDe(chemin[1], '*');
-		System.out.println("gaucheIndex : " + poGauche);
-		int posDroite = dernierePositionDe(chemin[1], '*');
-		System.out.println("droiteIndex : " + posDroite);
+		/*
+		for (int i = 1; i < chemin.length; i++) {
+			// explorer gauche et droite suite
+			int posGauche = positionDe(chemin[i], '*');
+			System.out.println("gaucheIndex : " + posGauche);
+			int posDroite = dernierePositionDe(chemin[i], '*');
+			System.out.println("droiteIndex : " + posDroite);
+			
+			// Ajouter les nouvelles directions aux précédentes
+			directions += "G".repeat(depart - posGauche)  + "D".repeat(posDroite - depart);
+		}
+		*/
+		
+		
+		
+		
+		
+		int direction;
+		
+		for (int i = 1; i < chemin.length; i++) {
+			int colMove;
+			int posGauche;
+			int posDroite;
+			
+			posGauche = positionDe(chemin[i], '*');
+			posDroite = dernierePositionDe(chemin[i], '*');
+			
+			if (posGauche < depart) {
+				direction = -1;
+			} else if (posDroite > depart) {
+				direction = 1;
+			} else {
+				direction = 0;
+			}
+
+			colMove = Math.abs(posGauche - posDroite);
+
+			if (direction == 0 ) {
+				directions += "B";
+				depart = posGauche;
+			}
+			
+			for (int j = colMove; j > 0; j--) {
+				if (direction == -1) {
+					directions += "G";
+				} else if (direction == 1) {
+					directions += "D";
+				}
+			}
+			
+			if (direction == -1) {
+				depart = posGauche;
+			} else if (direction == 1) {
+				depart = posDroite;
+			}
+			
+		}
+		
+		System.out.println(directions);
+		
+		
+		
+		// Ajoute les nouvells dirctions aux précédentes
+		//directions += ;
 		
 	}
 

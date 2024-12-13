@@ -4,22 +4,25 @@ import java.util.Arrays;
 
 import io.Console;
 
-public class CollecteDons {
+public class CollecteDonsTab2d {
 
 	public static void main(String[] args) {
 		// Tableaux
 		String[] collecteurs = { };
-		int[] donsRecoltes;
+		int[][] donsRecoltes;
 
 		// Variables
 		String collecteurSaisi, choixContinuer, saisie;
 		int donSaisi, posCollecteur;
 
 		// DEBUT DEBUG
-//		Console.simulerSaisies("Lucas", "Sophie", "Jeanne", "Tobias", "");
-//		Console.simulerSaisies("Jeanne", "100", "c");
-//		Console.simulerSaisies("Sophie", "150", "c");
-//		Console.simulerSaisies("Lucas", "140", "q");
+		Console.simulerSaisies("Lucas", "Sophie", "Jeanne", "Tobias", "");
+		Console.simulerSaisies("Jeanne", "100", "c");
+		Console.simulerSaisies("Jeanne", "70", "c");
+		Console.simulerSaisies("Sophie", "150", "c");
+		Console.simulerSaisies("Sophie", "50", "c");
+		Console.simulerSaisies("Sophie", "30", "c");
+		Console.simulerSaisies("Lucas", "140", "q");
 //		donsRecoltes = new int[] { 140, 150, 100, 60 };
 		// FIN DEBUG
 
@@ -31,8 +34,8 @@ public class CollecteDons {
 			collecteurs = ajouterElement(collecteurs, saisie);
 			saisie = Console.lireString("Prénom du collecteur ? ").trim();
 		}
-
-		donsRecoltes = new int[collecteurs.length];
+		System.out.println("Fin encodage.\n");
+		donsRecoltes = new int[collecteurs.length][0];
 
 		// Traitement
 		do {
@@ -43,7 +46,8 @@ public class CollecteDons {
 			} while (posCollecteur < 0);
 
 			donSaisi = Console.lireInt("Montant des dons récoltés ? ");
-			donsRecoltes[posCollecteur] += donSaisi;
+			//donsRecoltes[posCollecteur] += donSaisi;
+			donsRecoltes[posCollecteur] = ajouterElement(donsRecoltes[posCollecteur], donSaisi);
 			// System.out.println(Arrays.toString(donsRecoltes)); // DEBUG
 
 			choixContinuer = Console.lireString("(C)ontinuer, (q)uitter ? ").trim();
@@ -51,10 +55,30 @@ public class CollecteDons {
 		} while (choixContinuer.toLowerCase().startsWith("c"));
 
 		// Afficher le meilleur montant récolté
-		System.out.printf("Meilleur montant récolté = %d EUR\n", maximum(donsRecoltes));
+		System.out.printf("Meilleur montant récolté = %d EUR\n", maximum(sommerLignes(donsRecoltes)));
 
 		// Afficher le collecteur qui a réussi à récolter ce montant
-		System.out.printf("Meilleur collecteur = %s\n", collecteurs[posMaximum(donsRecoltes)]);
+		System.out.printf("Meilleur collecteur = %s\n", collecteurs[posMaximum(sommerLignes(donsRecoltes))]);
+		System.out.println(Arrays.toString(donsRecoltes));
+		
+	}
+	
+	public static int[] sommerLignes(int[][] t) {
+		int[] sommes = new int[t.length];
+		
+		for (int i = 0; i < t.length; i++) {
+			for (int j = 0; j < t[i].length; j++) {
+				sommes[i] += t[i][j];
+			}
+		}
+		System.out.println(Arrays.toString(sommes));
+		return sommes;
+	}
+
+	public static int[] ajouterElement(int[] t, int nouvelElement) {
+		int[] nouveau = Arrays.copyOf(t,  t.length +1);
+		nouveau[nouveau.length -1] = nouvelElement;
+		return nouveau;
 	}
 
 	/**

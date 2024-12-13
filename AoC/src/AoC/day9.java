@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class day9 {
 
@@ -12,9 +13,24 @@ public class day9 {
 		// TODO Auto-generated method stub
 		//part1();
 		//part1ForReal();
+		
+		
+		// Cannot get the freaking correct number for part 2 of AoC 9 
+		// but at least I optimized the running time of my code ...	  
+		part2Original();
+		//	answer : 6353640225186
+		//	Duration : 1.717 sec 
 		part2();
+		//	answer : 6353640225186
+		//	Duration : 0.923 sec 
+		part2NewIdea();	
+		//	answer : 6353640225186
+		//	Duration : 0.371 sec 
+		 
+
+        //part2StringBuilder();
 	}
-	
+		
 	public static void part1() {
 		//String[] string = Fichier.lireLignes("data/day8Input1.txt");
 		Path file = Paths.get("data/day9Input2.txt");
@@ -177,9 +193,9 @@ public class day9 {
 
 	}
 	
-	
-	public static void part2() {
-
+	public static void part2Original() {
+		long startTime = System.nanoTime();
+		
 		Path file = Paths.get("data/day9Input2.txt");
 		String string = null;
 		try {
@@ -195,53 +211,369 @@ public class day9 {
 		
 		for (int i = 0; i < length; i++) {
 					
-			if(i % 2 == 0) {
-				int repeats = Character.getNumericValue(string.charAt(i));
-				for (int j = 0; j < repeats; j++) {
-					fullString.add(String.valueOf(count));
-				}
-				count++;
+			int repeats = Character.getNumericValue(string.charAt(i));
+			String toAppend;
+			
+			if (i % 2 == 0) {
+				toAppend = String.valueOf(count++);
 			} else {
+			    toAppend = ".";
+			}
+			
+			for (int j = 0; j < repeats; j++) {
+				fullString.add(String.valueOf(toAppend));
+			}
+		}
+
+//		System.out.println(Arrays.toString(fullString));
+
+		int fullLength = fullString.size();
+		String check = "";
+		int j = fullLength-1;
+		
+		check = fullString.get(j);
+		String oldCheck = check;
+		int backCount = 0;
+		for (int i = 0; i < j; i++) {
+		
+			check = fullString.get(j-i);
+				
+			if(!oldCheck.equals(".")) {
+				
+				if(!check.equals(oldCheck)) {
+					int index = j-i;
+					for (int k = 0; k < index; k++) {
+						if (fullString.get(k).equals(".")){
+							int points = k;
+							do {
+								points++;
+							} while (fullString.get(points).equals("."));
+						
+							if(backCount <=  points-k) {
+								for (int m = 0; m < backCount; m++) {
+									fullString.set(m+k,oldCheck);
+									fullString.set(index+backCount-m,".");
+								}
+								backCount = 0;
+//									System.out.println(Arrays.toString(fullString));
+								break;
+							}
+						}
+					}	
+					backCount = 0;			
+				}
+			
+			}else {
+				backCount = 0;
+			}
+			oldCheck = check;
+			backCount++;
+		}
+
+//		System.out.println(fullString);
+		
+		long somme = 0;
+		int finalIndex = 0;
+		for (int i = 0; i < fullLength; i++) {
+			if(fullString.get(i).equals(".") && i > 0) {
+				finalIndex++;
+			} else {
+				int value = Integer.parseInt(fullString.get(i));
+				long calcul = finalIndex * value;
+//				System.out.printf("%d * %d = %d\n", value, finalIndex, calcul);
+				somme += calcul;
+				finalIndex++;
+			}
+		}
+		
+		System.out.println(somme);
+		
+		long endTime = System.nanoTime(); 
+        long duration = (endTime - startTime) / 1000000;
+        System.out.println("Duration : " + duration/1000.00 + " sec ");
+        
+	}
+	
+	// copied the ArrayList<String> to a String[] to optimize the process and overall time got faster but still got same result :'(
+	public static void part2() {
+		long startTime = System.nanoTime();
+		
+		Path file = Paths.get("data/day9Input2.txt");
+		String string = null;
+		try {
+			string = Files.readString(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+//		System.out.println(string);
+		
+		ArrayList<String> array = new ArrayList<String>();
+		int count = 0, length = string.length();
+		
+		for (int i = 0; i < length; i++) {
+					
+			int repeats = Character.getNumericValue(string.charAt(i));
+			String toAppend;
+			
+			if (i % 2 == 0) {
+				toAppend = String.valueOf(count++);
+			} else {
+			    toAppend = ".";
+			}
+			
+			for (int j = 0; j < repeats; j++) {
+				array.add(String.valueOf(toAppend));
+			}
+		}
+		
+		String[] fullString = array.toArray(new String[0]);
+
+//		System.out.println(Arrays.toString(fullString));
+
+		int fullLength = fullString.length;
+		String check = "";
+		int j = fullLength-1;
+		
+		check = fullString[j];
+		String oldCheck = check;
+		int backCount = 0;
+		for (int i = 0; i < j; i++) {
+		
+			check = fullString[j-i];
+				
+			if(!oldCheck.equals(".")) {
+				
+				if(!check.equals(oldCheck)) {
+					int index = j-i;
+					for (int k = 0; k < index; k++) {
+						if (fullString[k].equals(".")){
+							int points = k;
+							do {
+								points++;
+							} while (fullString[points].equals("."));
+						
+							if(backCount <=  points-k) {
+								for (int m = 0; m < backCount; m++) {
+									fullString[m+k] = oldCheck;
+									fullString[index+backCount-m] = ".";
+								}
+								backCount = 0;
+//									System.out.println(Arrays.toString(fullString));
+								break;
+							}
+						}
+					}	
+					backCount = 0;			
+				}
+			}else {
+				backCount = 0;
+			}
+			oldCheck = check;
+			backCount++;
+		}
+
+
+//		System.out.println(fullString);
+
+		long somme = 0;
+		int finalIndex = 0;
+		for (int i = 0; i < fullLength; i++) {
+			if(fullString[i].equals(".") && i > 0) {
+				finalIndex++;
+			} else {
+				int value = Integer.parseInt(fullString[i]);
+				long calcul = finalIndex * value;
+//				System.out.printf("%d * %d = %d\n", value, finalIndex, calcul);
+				somme += calcul;
+				finalIndex++;
+			}
+		}
+		
+		
+		System.out.println(somme);
+		
+		long endTime = System.nanoTime(); 
+        long duration = (endTime - startTime) / 1000000;
+        System.out.println("Duration : " + duration/1000.00 + " sec ");
+        
+	}
+	
+	// Trying to change the logic from using strings to int, we'll see
+		public static void part2NewIdea() {
+			long startTime = System.nanoTime();
+			
+			Path file = Paths.get("data/day9Input2.txt");
+			String string = null;
+			try {
+				string = Files.readString(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			int firstNumberOfString = 6;
+
+//			System.out.println(string);
+			
+			ArrayList<Integer> array = new ArrayList<Integer>();
+			int count = 0, length = string.length();
+			
+			for (int i = 0; i < length; i++) {
+						
 				int repeats = Character.getNumericValue(string.charAt(i));
+				int toAdd;
+				
+				if (i % 2 == 0) {
+					toAdd = count++;
+				} else {
+				    toAdd = 0;
+				}
+				
 				for (int j = 0; j < repeats; j++) {
-					fullString.add(".");
+					array.add(toAdd);
 				}
 			}
+			
+			int fullLength = array.size();
+			
+			int[] fullArray = new int[fullLength];
+	        for (int i = 0; i < fullLength; i++) {
+	        	fullArray[i] = array.get(i);
+	        }
 
+//			System.out.println(Arrays.toString(fullArray));
+			
+			int check;
+			int j = fullLength-1;
+			// starting from the end of the array --
+			
+			check = fullArray[j];
+			int oldCheck = check;
+			int backCount = 0;
+			
+			// starting after the "firstNumberOfString" first elements 0
+			for (int i = firstNumberOfString; i < j; i++) {
+			
+				check = fullArray[j-i+firstNumberOfString];
+					
+				if(!(oldCheck == 0)) {
+					// if the new number is != than the previous one
+					if(!(check == oldCheck)) {
+						int index = j-i+firstNumberOfString;
+						// search left to right for zeros
+						for (int k = firstNumberOfString; k < index; k++) {
+							if (fullArray[k] == 0){
+								int points = k;
+								// count how many zeros after first one found
+								do {
+									points++;
+								} while (fullArray[points] == 0);
+							
+								if(backCount <=  points-k) {
+									for (int m = 0; m < backCount; m++) {
+										fullArray[m+k] = oldCheck;
+										fullArray[index+backCount-m] = 0;
+									}
+									backCount = 0;
+//									System.out.println(Arrays.toString(fullArray));
+									break;
+								}
+							}
+						}	
+						backCount = 0;			
+					}
+				}else {
+					backCount = 0;
+				}
+				oldCheck = check;
+				backCount++;
+			}
+
+//			System.out.println(fullString);
+			
+			long somme = 0;
+
+			for (int i = 0; i < fullLength; i++) {
+				int value = fullArray[i];
+				long calcul = i * value;
+//					System.out.printf("%d * %d = %d\n", value, i, calcul);
+				somme += calcul;
+			}
+			
+			System.out.println(somme);
+			
+			long endTime = System.nanoTime(); 
+	        long duration = (endTime - startTime) / 1000000;
+	        System.out.println("Duration : " + duration/1000.00 + " sec ");
+	        
+		}
+
+	
+	// NOT GOOD (9999 is seen as 4 9) but keeping for stringBuilder logic
+	public static void part2StringBuilder() {
+		long startTime = System.nanoTime();
+		
+		Path file = Paths.get("data/day9Input2.txt");
+		String string = null;
+		try {
+			string = Files.readString(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+//		System.out.println(string);
+		
+		StringBuilder fullString = new StringBuilder();
+		int count = 0, length = string.length();
+		
+		for (int i = 0; i < length; i++) {
+					
+			int repeats = Character.getNumericValue(string.charAt(i));
+			String toAppend;
+			
+			if (i % 2 == 0) {
+				toAppend = String.valueOf(count++);
+			} else {
+			    toAppend = ".";
+			}
+			
+			for (int j = 0; j < repeats; j++) {
+			    fullString.append(String.valueOf(toAppend));
+			}
 		}
 
 //		System.out.println(fullString);
 		
 		
-		int fullLength = fullString.size();
-		String check = "";
+		int fullLength = fullString.length();
+		char check = ' ';
 		for (int j = fullLength-1; j > 0; j--) {
-			if(check.equals("0")) {
+			if(check == '0') {
 				break;
 			}
 				
-			check = fullString.get(j);
-			String oldCheck = check;
+			check = fullString.charAt(j);
+			char oldCheck = check;
 			int backCount = 0;
 			for (int i = 0; i <= j; i++) {
 			
-				check = fullString.get(j-i);
+				check = fullString.charAt(j-i);
 					
-				if(!oldCheck.equals(".")) {
+				if(!(oldCheck == '.')) {
 					
-					if(!check.equals(oldCheck)) {
+					if(!(check == oldCheck)) {
 						int index = j-i;
 						for (int k = 0; k <= index; k++) {
-							if (fullString.get(k).equals(".")){
+							if (fullString.charAt(k) == '.'){
 								int points = k;
 								do {
 									points++;
-								} while (fullString.get(points).equals("."));
+								} while (fullString.charAt(points) == '.');
 							
 								if(backCount <=  points-k) {
 									for (int m = 0; m < backCount; m++) {
-										fullString.set(m+k,oldCheck);
-										fullString.set(index+backCount-m, ".");
+										fullString.setCharAt(m+k,oldCheck);
+										fullString.setCharAt(index+backCount-m, '.');
 									}
 									backCount = 0;
 //									System.out.println(fullString);
@@ -260,16 +592,17 @@ public class day9 {
 			}
 		}
 		
+
 //		System.out.println(fullString);
 		
 
 		long somme = 0;
 		int finalIndex = 0;
 		for (int i = 0; i < fullLength; i++) {
-			if(fullString.get(i).equals(".") && i > 0) {
+			if(fullString.charAt(i) == '.' && i > 0) {
 				finalIndex++;
 			} else {
-				int value = Integer.parseInt(fullString.get(i));
+				int value = Character.getNumericValue(fullString.charAt(i));
 				long calcul = finalIndex * value;
 //				System.out.printf("%d * %d = %d\n", value, finalIndex, calcul);
 				somme += calcul;
@@ -279,7 +612,10 @@ public class day9 {
 		
 		
 		System.out.println(somme);
-
+		
+		long endTime = System.nanoTime(); 
+        long duration = (endTime - startTime) / 1000000;
+        System.out.println("Duration : " + duration/1000.00 + " sec ");
 	}
-
+	
 }
