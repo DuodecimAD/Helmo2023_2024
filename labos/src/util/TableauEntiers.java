@@ -13,7 +13,12 @@ public class TableauEntiers {
 		
 		return false;
 	}
-	
+	/**
+	 * 
+	 * @param tableau tableau d'entiers complet
+	 * @param i element a permuté
+	 * @param j nouvelle position de element i
+	 */
 	public static void permuter(int[] tableau, int i, int j) {
 		int temp = tableau[i];
 		tableau[i] = tableau[j];
