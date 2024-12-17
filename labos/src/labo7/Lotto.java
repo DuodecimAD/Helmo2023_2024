@@ -7,23 +7,6 @@ import util.Aleatoire;
 import util.TableauEntiers;
 
 public class Lotto {
-
-	public static void main(String[] args) {
-		
-		// Tableaux
-		int[] tirage = genererTirage(7,45);
-		int[] maGrille = encoderGrille(6,45);
-		int[] numerosGagnants = compterNumerosGagnants(tirage, maGrille);
-		int rang = determinerRang(numerosGagnants);
-		double gain = obtenirGain(rang);
-		
-		// Affichage
-		System.out.println("Votre grille est " + TableauEntiers.toString(maGrille));
-		System.out.println("Le tirage est " + TableauEntiers.toString(tirage));
-		System.out.println("Vous avez " + numerosGagnants[0] + " numéros gagnat");		
-		System.out.println("Vous gagnez " + gain + " euros");
-		
-	}
 	
 	static int[] genererTirage(int nbTirages, int numeroMax) {
 		int[] tirage = new int[nbTirages];
@@ -58,7 +41,7 @@ public class Lotto {
 		do {
 			String acquisition;
 			do {
-				acquisition = Console.lireString("Numéro " + index + 1 + " ? ");
+				acquisition = Console.lireString("Numéro " + (index + 1) + " ? ");
 			} while(!acquisition.matches("\\d+"));
 			int numeroUser = Integer.parseInt(acquisition);
 			
@@ -108,16 +91,18 @@ public class Lotto {
 		if (numerosGagnants[1] == 0) {
 			return (7 - numerosGagnants[0]) * 2 - 1;
 		} else {
-			return 7 - numerosGagnants[0];
+			return (7 - numerosGagnants[0]) * 2 - 2;
 		}
 	}
 	
 	static double obtenirGain(int rang) {
 		double[] gains = {500000.00, 75000.00 , 1500.00, 250.00, 30.00, 10.00, 5.00, 3.00};
 		
+		if (rang > 8) {
+			return 0.00;
+		}
+		
 		return	gains[rang-1];
 	}
-	
-
 
 }

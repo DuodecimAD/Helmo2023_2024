@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import src.labo3.Emprunt;
 
 @TestMethodOrder(OrderAnnotation.class)
 class EmpruntTest {

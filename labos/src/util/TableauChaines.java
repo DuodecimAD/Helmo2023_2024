@@ -29,5 +29,16 @@ public class TableauChaines {
 
 		return stuff;
 	}
+	
+	public static boolean contient(String[] t, String chaine) {
+		
+		for (int i = 0; i < t.length; i++) {
+			if(t[i].equals(chaine)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 }
